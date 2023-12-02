@@ -6,16 +6,19 @@ class CustomFloatingActionButton extends StatelessWidget {
   final String imagePath;
   final String semanticsLabel;
 
-  const CustomFloatingActionButton({
-    super.key,
-    required this.onPressed,
-    required this.imagePath,
-    required this.semanticsLabel,
-  });
+  final String heroTag;
+
+  const CustomFloatingActionButton(
+      {super.key,
+      required this.onPressed,
+      required this.imagePath,
+      required this.semanticsLabel,
+      required this.heroTag});
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      heroTag: heroTag,
       onPressed: onPressed,
       backgroundColor: const Color.fromARGB(40, 96, 85, 62),
       elevation: 0,

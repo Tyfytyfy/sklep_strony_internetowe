@@ -36,6 +36,7 @@ class ContactButtonsContainer extends StatelessWidget {
               },
               imagePath: 'assets/images/phone.svg',
               semanticsLabel: 'phone',
+              heroTag: 'phone',
             ),
           ),
           const SizedBox(
@@ -58,6 +59,7 @@ class ContactButtonsContainer extends StatelessWidget {
               },
               imagePath: 'assets/images/faq.svg',
               semanticsLabel: 'faq',
+              heroTag: 'faq',
             ),
           ),
         ],

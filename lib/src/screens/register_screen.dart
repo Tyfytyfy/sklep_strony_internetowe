@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:sklep_strony_internetowe/src/screens/register_screen.dart';
-import 'package:sklep_strony_internetowe/src/screens/reset_password_screen.dart';
 import 'package:sklep_strony_internetowe/src/shared/contact_faq_button.dart';
 import 'package:sklep_strony_internetowe/src/shared/gesture_detector_text.dart';
 
 import '../constants/input_decoration.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   String email = '';
   String password = '';
-  bool? isChecked = false;
+  String confirmPassword = '';
   final scrollController = ScrollController();
 
   @override
@@ -80,26 +78,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                     ),
+                    const SizedBox(
+                      height: 11,
+                    ),
                     Container(
-                      width: 156,
-                      height: 42,
-                      margin: const EdgeInsets.only(left: 94, right: 110),
-                      child: Row(
-                        children: [
-                          Checkbox(
-                            value: isChecked,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                isChecked = value!;
-                              });
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                          const Text('Zapamiętaj mnie'),
-                        ],
+                      width: 205,
+                      height: 47,
+                      margin: const EdgeInsets.only(left: 77, right: 78),
+                      child: TextFormField(
+                        decoration: textInputDecoration.copyWith(
+                            hintText: 'Potwierdź hasło'),
+                        obscureText: true,
+                        validator: (val) =>
+                            val!.isEmpty ? 'Potwierdź hasło' : null,
+                        onChanged: (val) {
+                          setState(() => confirmPassword = val);
+                        },
                       ),
+                    ),
+                    const SizedBox(
+                      height: 11,
                     ),
                     ElevatedButton(
                       onPressed: () {},
@@ -111,33 +109,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(100),
                         ),
                       ),
-                      child: const Text('Zaloguj się'),
+                      child: const Text('Zarejestruj się'),
                     ),
                     const SizedBox(
                       height: 8,
                     ),
                     GestureDetectorText(
-                        text: 'Nie posiadasz konta? Zarejestruj się',
+                        text: 'Masz już konto? Zaloguj się',
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const RegisterScreen()),
-                          );
+                          Navigator.pop(context);
                         }),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    GestureDetectorText(
-                        text: 'Zapomniałeś hasła?',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const ResetPasswordScreen()),
-                          );
-                        })
                   ],
                 ),
               ),
