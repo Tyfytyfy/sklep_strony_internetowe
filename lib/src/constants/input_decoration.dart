@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 final textInputDecoration = InputDecoration(
   fillColor: Colors.white,
   filled: true,
-  contentPadding: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
+  contentPadding:
+      const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 10),
   enabledBorder: OutlineInputBorder(
     borderRadius: BorderRadius.circular(100),
     borderSide: const BorderSide(color: Colors.white, width: 2),

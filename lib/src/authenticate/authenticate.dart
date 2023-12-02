@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sklep_strony_internetowe/src/screens/login_screen.dart';
+import 'package:sklep_strony_internetowe/src/authenticate/login_screen.dart';
+import 'package:sklep_strony_internetowe/src/authenticate/register_screen.dart';
 
 class Authenticate extends StatefulWidget {
   const Authenticate({super.key});
@@ -12,6 +13,7 @@ class _AuthenticateState extends State<Authenticate> {
   bool showSignIn = true;
 
   void toggleView() {
+    print(showSignIn.toString());
     setState(() => showSignIn = !showSignIn);
   }
 
@@ -20,7 +22,7 @@ class _AuthenticateState extends State<Authenticate> {
     if (showSignIn) {
       return LoginScreen(toggleView: toggleView);
     } else {
-      return Register(toggleView: toggleView);
+      return RegisterScreen(toggleView: toggleView);
     }
   }
 }
