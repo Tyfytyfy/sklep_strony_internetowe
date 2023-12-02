@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "120886362643",
+    "project_id": "strony-internetowe-989ea",
+    "storage_bucket": "strony-internetowe-989ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120886362643:android:680f562969b5e903d075e6",
+        "android_client_info": {
+          "package_name": "com.example.sklep_strony_internetowe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBng1kJyuqi0pv5MUJJ_GmyUzVjx4VnInc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
