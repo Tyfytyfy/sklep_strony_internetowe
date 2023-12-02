@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sklep_strony_internetowe/src/authenticate/login_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:sklep_strony_internetowe/src/screens/wrapper.dart';
+import 'package:sklep_strony_internetowe/src/services/auth.dart';
+import 'package:sklep_strony_internetowe/src/models/user.dart' as custom_user;
 
 //import 'src/app.dart';
 import 'src/settings/settings_controller.dart';
@@ -38,8 +41,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: LoginScreen(),
+    return StreamProvider<custom_user.User?>.value(
+      value: AuthService().user,
+      initialData: null,
+      child: const MaterialApp(
+        home: Wrapper(),
+      ),
     );
   }
 }
