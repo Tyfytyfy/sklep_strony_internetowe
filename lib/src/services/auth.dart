@@ -97,4 +97,23 @@ class AuthService {
       return false; // Resetowanie hasła nie powiodło się
     }
   }
+
+  // zmiana email
+  Future updateEmail(String email, BuildContext context) async {
+    try {
+      _auth.currentUser?.updateEmail(email);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Adres e-mail został zaktualizowany'),
+        ),
+      );
+    } catch (e) {
+      print(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Błąd podczas aktualizacji e-maila'),
+        ),
+      );
+    }
+  }
 }

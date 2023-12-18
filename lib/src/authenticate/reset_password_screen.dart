@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sklep_strony_internetowe/src/constants/error_decoration.dart';
 import 'package:sklep_strony_internetowe/src/services/auth.dart';
 
 import 'package:sklep_strony_internetowe/src/shared/contact_faq_button.dart';
@@ -85,6 +86,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                     await _auth.resetPassword(email, context);
                                 if (result == true) {
                                   // Powiadomienie o sukcesie
+                                  if (!mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text(
@@ -127,10 +129,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                 Navigator.pop(context);
                               }),
                           const SizedBox(height: 8),
-                          Text(
-                            error,
-                            style: const TextStyle(
-                                color: Colors.red, fontSize: 14),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100)),
+                            child: Text(error, style: errorSyle),
                           )
                         ],
                       ),

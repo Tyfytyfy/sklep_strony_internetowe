@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sklep_strony_internetowe/src/constants/error_decoration.dart';
 import 'package:sklep_strony_internetowe/src/services/auth.dart';
 import 'package:sklep_strony_internetowe/src/shared/contact_faq_button.dart';
 import 'package:sklep_strony_internetowe/src/shared/gesture_detector_text.dart';
@@ -151,10 +152,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 widget.toggleView!();
                               }),
                           const SizedBox(height: 8),
-                          Text(
-                            error,
-                            style: const TextStyle(
-                                color: Colors.red, fontSize: 14),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100)),
+                            child: Text(error, style: errorSyle),
                           )
                         ],
                       ),
