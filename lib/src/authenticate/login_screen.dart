@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sklep_strony_internetowe/src/authenticate/reset_password_screen.dart';
+import 'package:sklep_strony_internetowe/src/constants/error_decoration.dart';
 import 'package:sklep_strony_internetowe/src/services/auth.dart';
 
 import 'package:sklep_strony_internetowe/src/shared/contact_faq_button.dart';
@@ -21,11 +23,38 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final scrollController = ScrollController();
 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   String email = '';
   String password = '';
   bool? isChecked = false;
   bool loading = false;
   String error = '';
+
+  @override
+  void initState() {
+    super.initState();
+    loadSavedCredentials();
+  }
+
+  void loadSavedCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _emailController.text = prefs.getString('email') ?? '';
+      _passwordController.text = prefs.getString('password') ?? '';
+      email = prefs.getString('email') ?? '';
+      password = prefs.getString('password') ?? '';
+      isChecked = prefs.getBool('isChecked') ?? false;
+    });
+  }
+
+  void saveCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('email', _emailController.text);
+    prefs.setString('password', _passwordController.text);
+    prefs.setBool('isChecked', isChecked!);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 47,
                             margin: const EdgeInsets.only(left: 77, right: 78),
                             child: TextFormField(
+                              controller: _emailController,
                               decoration: textInputDecoration.copyWith(
                                   hintText: 'Email'),
                               validator: (val) =>
@@ -83,6 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 47,
                             margin: const EdgeInsets.only(left: 77, right: 78),
                             child: TextFormField(
+                              controller: _passwordController,
                               decoration: textInputDecoration.copyWith(
                                   hintText: 'Hasło'),
                               obscureText: true,
@@ -118,10 +149,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 setState(() => loading = true);
-
+                                print(password);
+                                print(email);
                                 dynamic result =
                                     await _auth.signInWithEmailAndPassword(
                                         email, password);
+                                if (isChecked!) {
+                                  saveCredentials();
+                                }
                                 if (result == null) {
                                   setState(() {
                                     error = "Nieprawidłowe dane do logowania";
@@ -162,10 +197,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
                               }),
                           const SizedBox(height: 8),
-                          Text(
-                            error,
-                            style: const TextStyle(
-                                color: Colors.red, fontSize: 14),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100)),
+                            child: Text(error, style: errorSyle),
                           )
                         ],
                       ),
