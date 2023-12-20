@@ -116,4 +116,23 @@ class AuthService {
       );
     }
   }
+
+  // Update password
+  Future updatePassword(String password, BuildContext context) async {
+    try {
+      _auth.currentUser?.updatePassword(password);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Hasło zostało zaktualizowane'),
+        ),
+      );
+    } catch (e) {
+      print(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Błąd podczas aktualizacji hasła'),
+        ),
+      );
+    }
+  }
 }
