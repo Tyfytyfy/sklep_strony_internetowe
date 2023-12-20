@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sklep_strony_internetowe/src/authenticate/register_screen.dart';
 import 'package:sklep_strony_internetowe/src/authenticate/reset_password_screen.dart';
 import 'package:sklep_strony_internetowe/src/constants/error_decoration.dart';
+import 'package:sklep_strony_internetowe/src/screens/home/home.dart';
 import 'package:sklep_strony_internetowe/src/services/auth.dart';
 
 import 'package:sklep_strony_internetowe/src/shared/contact_faq_button.dart';
@@ -156,14 +158,33 @@ class _LoginScreenState extends State<LoginScreen> {
                                 dynamic result =
                                     await _auth.signInWithEmailAndPassword(
                                         email, password);
-                                if (isChecked!) {
-                                  saveCredentials();
-                                }
                                 if (result == null) {
-                                  setState(() {
-                                    error = "Nieprawidłowe dane do logowania";
-                                    loading = false;
-                                  });
+                                  if (mounted) {
+                                    setState(() {
+                                      error = "Nieprawidłowe dane do logowania";
+                                      loading = false;
+                                    });
+                                  }
+                                } else if (result == 'notVerified') {
+                                  if (mounted) {
+                                    setState(() {
+                                      error =
+                                          "Email nie jest zweryfikowany. Sprawdź skrzynkę mailową.";
+                                      loading = false;
+                                    });
+                                  }
+                                } else {
+                                  // Pomyślne logowanie, użytkownik jest zweryfikowany
+                                  if (isChecked!) {
+                                    saveCredentials();
+                                  }
+                                  if (!mounted) return;
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const HomeScreen()),
+                                  );
                                 }
                               }
                             },
@@ -183,7 +204,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           GestureDetectorText(
                               text: 'Nie posiadasz konta? Zarejestruj się',
                               onTap: () {
-                                widget.toggleView!();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RegisterScreen()),
+                                );
                               }),
                           const SizedBox(
                             height: 8,

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sklep_strony_internetowe/src/models/user.dart' as custom_user;
 import 'package:sklep_strony_internetowe/src/services/database.dart';
 
@@ -31,17 +32,22 @@ class AuthService {
   }
 
   //Sign in with email i password
-
-  Future signInWithEmailAndPassword(String email, String password) async {
+  Future<dynamic> signInWithEmailAndPassword(
+      String email, String password) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
       print(user);
-      return _userFromFirebaseUser(user);
+      if (user?.emailVerified ?? false) {
+        return _userFromFirebaseUser(user);
+      } else {
+        await _auth.signOut();
+        return 'notVerified'; // Zwracaj string 'notVerified', aby oznaczyć niezweryfikowanego użytkownika
+      }
     } catch (e) {
       print(e.toString());
-      return null;
+      return 'error'; // Zwracaj string 'error' w przypadku błędu logowania
     }
   }
 
@@ -104,9 +110,11 @@ class AuthService {
       _auth.currentUser?.updateEmail(email);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Adres e-mail został zaktualizowany'),
+          content: Text('Na nowy adres email został '),
         ),
       );
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('email', email);
     } catch (e) {
       print(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(
@@ -126,6 +134,8 @@ class AuthService {
           content: Text('Hasło zostało zaktualizowane'),
         ),
       );
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('password', password);
     } catch (e) {
       print(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(

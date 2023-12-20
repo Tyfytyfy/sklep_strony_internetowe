@@ -46,9 +46,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     MaterialPageRoute(
                         builder: (context) => const LoginScreen()),
                   );
-                  if (context.mounted) {
-                    Navigator.of(context).pop();
-                  }
                 },
                 icon: const Icon(Icons.logout),
                 label: const Text('Wyloguj'),
