@@ -40,13 +40,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void loadSavedCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _emailController.text = prefs.getString('email') ?? '';
-      _passwordController.text = prefs.getString('password') ?? '';
-      email = prefs.getString('email') ?? '';
-      password = prefs.getString('password') ?? '';
-      isChecked = prefs.getBool('isChecked') ?? false;
-    });
+    if (mounted) {
+      setState(() {
+        _emailController.text = prefs.getString('email') ?? '';
+        _passwordController.text = prefs.getString('password') ?? '';
+        email = prefs.getString('email') ?? '';
+        password = prefs.getString('password') ?? '';
+        isChecked = prefs.getBool('isChecked') ?? false;
+      });
+    }
   }
 
   void saveCredentials() async {
