@@ -14,10 +14,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<custom_user.User?>(context);
+    print(user?.email);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(240, 217, 186, 140),
-        title: Text(user!.email ?? ""),
+        title: Text(user?.email ?? ""),
         actions: [
           ElevatedButton.icon(
             onPressed: () {

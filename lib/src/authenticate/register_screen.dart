@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sklep_strony_internetowe/src/authenticate/email_verification.dart';
+import 'package:sklep_strony_internetowe/src/authenticate/login_screen.dart';
 import 'package:sklep_strony_internetowe/src/constants/error_decoration.dart';
 import 'package:sklep_strony_internetowe/src/services/auth.dart';
 import 'package:sklep_strony_internetowe/src/shared/contact_faq_button.dart';
@@ -123,9 +125,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                                 if (result == null) {
                                   setState(() {
-                                    error = "please daj poprawny email.";
+                                    error = "Podaj poprawny adres email.";
                                   });
+                                } else {
+                                  // Przechodzenie do ekranu weryfikacji e-maila tylko po udanej rejestracji
+                                  if (!mounted) return;
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const EmailVerificationScreen(),
+                                    ),
+                                  );
                                 }
+
                                 if (mounted) {
                                   setState(() {
                                     loading = false;
@@ -149,7 +162,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           GestureDetectorText(
                               text: 'Masz już konto? Zaloguj się',
                               onTap: () {
-                                widget.toggleView!();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LoginScreen()),
+                                );
                               }),
                           const SizedBox(height: 8),
                           Container(
