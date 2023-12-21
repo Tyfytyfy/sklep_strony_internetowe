@@ -149,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size(215, 55),
                               backgroundColor:
-                                  const Color.fromARGB(255, 195, 172, 126),
+                                  const Color.fromARGB(255, 185, 160, 107),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100),
                               ),
