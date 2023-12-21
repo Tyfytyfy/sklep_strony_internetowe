@@ -26,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Profil użytkownika ${username ?? ''}"),
-        backgroundColor: const Color.fromARGB(240, 217, 186, 140),
+        backgroundColor: const Color.fromARGB(255, 195, 172, 126),
       ),
       body: Container(
         decoration:
@@ -51,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 label: const Text('Wyloguj'),
                 style: ElevatedButton.styleFrom(
                     minimumSize: const Size(200, 40),
-                    backgroundColor: const Color.fromARGB(255, 195, 172, 126)),
+                    backgroundColor: const Color.fromARGB(255, 185, 160, 107)),
               ),
               const SizedBox(
                 height: 11,
@@ -67,7 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(200, 40),
                       backgroundColor:
-                          const Color.fromARGB(255, 195, 172, 126)),
+                          const Color.fromARGB(255, 185, 160, 107)),
                   child: const Text("Zmień hasło lub email"))
             ],
           ),

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sklep_strony_internetowe/src/models/user.dart' as custom_user;
 import 'package:sklep_strony_internetowe/src/screens/home/home.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({Key? key}) : super(key: key);
@@ -56,6 +57,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: const Color.fromARGB(240, 217, 186, 140),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,20 +68,44 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 child: Text(
                   'Sprawdź swoją \n skrzynkę mailową',
                   textAlign: TextAlign.center,
+                  style: TextStyle(fontStyle: FontStyle.normal, fontSize: 25),
                 ),
               ),
               const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: Center(
-                  child: Text(
-                    'Wysłaliśmy do Ciebie e-mail na ${user?.email}',
+                  child: RichText(
                     textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: const TextStyle(
+                          fontStyle: FontStyle.normal,
+                          fontSize: 25,
+                          color: Colors.black),
+                      children: [
+                        const TextSpan(
+                          text: 'Wysłaliśmy do Ciebie e-mail na ',
+                        ),
+                        if (user?.email != null)
+                          TextSpan(
+                            text: user?.email,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          )
+                      ],
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
-              const Center(child: CircularProgressIndicator()),
+              Center(
+                child: SpinKitPianoWave(
+                  color: (Colors.brown[600])!,
+                  size: 60.0,
+                ),
+              ),
               const SizedBox(height: 8),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32.0),
@@ -87,14 +113,17 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   child: Text(
                     'Weryfikacja e-maila....',
                     textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontStyle: FontStyle.normal,
+                        fontSize: 25,
+                        color: Colors.black),
                   ),
                 ),
               ),
-              const SizedBox(height: 57),
+              const SizedBox(height: 30),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: ElevatedButton(
-                  child: const Text('Wyślij ponownie'),
                   onPressed: () {
                     try {
                       FirebaseAuth.instance.currentUser
@@ -103,6 +132,18 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                       debugPrint('$e');
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(200, 55),
+                    backgroundColor: const Color.fromARGB(255, 185, 160, 107),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                  ),
+                  child: const Text('Wyślij ponownie',
+                      style: TextStyle(
+                        fontStyle: FontStyle.normal,
+                        fontSize: 20,
+                      )),
                 ),
               ),
             ],
