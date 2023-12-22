@@ -28,49 +28,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: Text("Profil użytkownika ${username ?? ''}"),
         backgroundColor: const Color.fromARGB(255, 195, 172, 126),
       ),
-      body: Container(
-        decoration:
-            const BoxDecoration(color: Color.fromARGB(240, 217, 186, 140)),
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 11,
-              ),
-              ElevatedButton.icon(
-                onPressed: () async {
-                  await _auth.signOut();
-                  if (!mounted) return;
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()),
-                  );
+      body: Center(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 11,
+            ),
+            ElevatedButton.icon(
+              onPressed: () async {
+                await _auth.signOut();
+                if (!mounted) return;
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+              icon: const Icon(Icons.logout),
+              label: const Text('Wyloguj'),
+              style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(200, 40),
+                  backgroundColor: const Color.fromARGB(255, 185, 160, 107)),
+            ),
+            const SizedBox(
+              height: 11,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const EmailPasswwordChange()));
                 },
-                icon: const Icon(Icons.logout),
-                label: const Text('Wyloguj'),
                 style: ElevatedButton.styleFrom(
                     minimumSize: const Size(200, 40),
                     backgroundColor: const Color.fromARGB(255, 185, 160, 107)),
-              ),
-              const SizedBox(
-                height: 11,
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const EmailPasswwordChange()));
-                  },
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(200, 40),
-                      backgroundColor:
-                          const Color.fromARGB(255, 185, 160, 107)),
-                  child: const Text("Zmień hasło lub email"))
-            ],
-          ),
+                child: const Text("Zmień hasło lub email"))
+          ],
         ),
       ),
     );
