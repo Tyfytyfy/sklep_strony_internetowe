@@ -14,10 +14,7 @@ class _CartScreenState extends State<CartScreen> {
       appBar: AppBar(
           title: const Text("Twój koszyk"),
           backgroundColor: const Color.fromARGB(255, 195, 172, 126)),
-      body: Container(
-        decoration:
-            const BoxDecoration(color: Color.fromARGB(240, 217, 186, 140)),
-      ),
+      body: Container(),
     );
   }
 }

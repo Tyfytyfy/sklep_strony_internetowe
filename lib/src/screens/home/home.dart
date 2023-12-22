@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sklep_strony_internetowe/src/models/user.dart' as custom_user;
 import 'package:sklep_strony_internetowe/src/screens/checkout.dart/cart.dart';
-import 'package:sklep_strony_internetowe/src/screens/home/auto_slider.dart';
+import 'package:sklep_strony_internetowe/src/screens/home/new_products_slider.dart';
 import 'package:sklep_strony_internetowe/src/screens/home/barcode.dart';
+import 'package:sklep_strony_internetowe/src/screens/home/offer_slider.dart';
 import 'package:sklep_strony_internetowe/src/screens/profile/profile.dart';
+import 'package:sklep_strony_internetowe/src/services/database.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,12 +17,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<String> items1 = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
-  final List<String> items2 = ['Item A', 'Item B', 'Item C', 'Item D'];
-
-  late AutoSlider autoSlider1;
-  late AutoSlider autoSlider2;
-
+  late OfferSlider offerSlider;
+  late NewProductsSlider newProductsSlider;
+  late DatabaseService databaseService;
   final List<String> departments = [
     'Elektronika',
     'Moda',
@@ -31,18 +30,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    autoSlider1 = AutoSlider(items1);
-    autoSlider2 = AutoSlider(items2);
-    autoSlider1.startAutoPlay();
-    autoSlider2.startAutoPlay();
-    if (autoSlider1.pageController.hasClients) {
-      autoSlider1.pageController.jumpToPage(0);
-    }
-    if (autoSlider2.pageController.hasClients) {
-      autoSlider2.pageController.jumpToPage(0);
-    }
+    offerSlider = const OfferSlider([]);
+    newProductsSlider = const NewProductsSlider([]);
+
+    databaseService = DatabaseService();
+    _updateOfferSliderData();
+    _updateNewProductsSliderData();
 
     super.initState();
+  }
+
+  void _updateOfferSliderData() {
+    databaseService.offers.listen((offers) {
+      setState(() {
+        offerSlider = OfferSlider(offers.toList());
+      });
+    });
+  }
+
+  void _updateNewProductsSliderData() {
+    databaseService.newProducts.listen((newProducts) {
+      setState(() {
+        newProductsSlider = NewProductsSlider(newProducts.toList());
+      });
+    });
   }
 
   @override
@@ -121,65 +132,59 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: Container(
-        decoration: BoxDecoration(color: Color.fromARGB(240, 217, 186, 140)),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                height: 150,
-                child: autoSlider1.build(),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                height: 150,
-                child: autoSlider2.build(),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height -
-                    360, // Dostosuj wysokość do potrzeb
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8.0,
-                    mainAxisSpacing: 8.0,
-                  ),
-                  itemCount: departments.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        // Tutaj dodaj akcję, która ma być wykonana po kliknięciu na kafelek
-                        // Możesz użyć Navigator do przeniesienia użytkownika na nową stronę
-                        // np. Navigator.push(context, MaterialPageRoute(builder: (context) => NowaStrona()));
-                      },
-                      child: Card(
-                        margin: const EdgeInsets.all(8.0),
-                        color: const Color.fromARGB(255, 185, 160,
-                            107), // Tutaj można dostosować kolor kafelka
-                        child: Center(
-                          child: Text(
-                            departments[index],
-                            style: const TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.white,
-                            ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 15,
+            ),
+            SizedBox(height: 150, child: offerSlider),
+            const SizedBox(
+              height: 15,
+            ),
+            SizedBox(
+              height: 150,
+              child: newProductsSlider,
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height -
+                  360, // Dostosuj wysokość do potrzeb
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                ),
+                itemCount: departments.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      // Tutaj dodaj akcję, która ma być wykonana po kliknięciu na kafelek
+                      // Możesz użyć Navigator do przeniesienia użytkownika na nową stronę
+                      // np. Navigator.push(context, MaterialPageRoute(builder: (context) => NowaStrona()));
+                    },
+                    child: Card(
+                      margin: const EdgeInsets.all(8.0),
+                      color: const Color.fromARGB(240, 217, 186,
+                          140), // Tutaj można dostosować kolor kafelka
+                      child: Center(
+                        child: Text(
+                          departments[index],
+                          style: const TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
