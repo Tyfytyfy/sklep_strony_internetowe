@@ -19,7 +19,7 @@ class PopupBarcode {
               BarcodeWidget(
                 barcode: Barcode.code128(),
                 data: uuid,
-                width: 200.0,
+                width: double.infinity, // Set width to fill the screen
                 height: 100.0,
                 color: Colors.black,
                 style: const TextStyle(fontSize: 16.0),

@@ -11,7 +11,7 @@ import '../constants/input_decoration.dart';
 
 class RegisterScreen extends StatefulWidget {
   final Function? toggleView;
-  const RegisterScreen({Key? key, this.toggleView}) : super(key: key);
+  const RegisterScreen({super.key, this.toggleView});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -154,7 +154,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 borderRadius: BorderRadius.circular(100),
                               ),
                             ),
-                            child: const Text('Zarejestruj się'),
+                            child: const Text('Zarejestruj się',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                )),
                           ),
                           const SizedBox(
                             height: 8,

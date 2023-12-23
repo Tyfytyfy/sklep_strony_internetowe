@@ -14,7 +14,7 @@ import '../constants/input_decoration.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function? toggleView;
-  const LoginScreen({Key? key, this.toggleView}) : super(key: key);
+  const LoginScreen({super.key, this.toggleView});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -129,12 +129,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           Container(
-                            width: 156,
-                            height: 42,
+                            width: 160,
+                            height: 41,
                             margin: const EdgeInsets.only(left: 94, right: 110),
                             child: Row(
                               children: [
                                 Checkbox(
+                                  checkColor: Colors.white,
+                                  activeColor:
+                                      const Color.fromARGB(255, 185, 160, 107),
                                   value: isChecked,
                                   onChanged: (bool? value) {
                                     setState(() {
@@ -196,7 +199,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 borderRadius: BorderRadius.circular(100),
                               ),
                             ),
-                            child: const Text('Zaloguj się'),
+                            child: const Text('Zaloguj się',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                )),
                           ),
                           const SizedBox(
                             height: 8,

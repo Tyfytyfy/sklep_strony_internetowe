@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:page_view_indicators/page_view_indicators.dart';
 import 'package:sklep_strony_internetowe/src/models/new_products.dart';
 
+import 'package:sklep_strony_internetowe/src/screens/home/sliders/flippable_card.dart';
+
 class NewProductsSlider extends StatefulWidget {
   final List<NewProducts> newProducts;
 
@@ -71,22 +73,52 @@ class _NewProductsSliderState extends State<NewProductsSlider> {
   }
 
   Widget buildItem(NewProducts newProduct) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      color: const Color.fromARGB(240, 217, 186, 140),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            newProduct.produkt,
-            style: const TextStyle(fontSize: 20.0, color: Colors.white),
-          ),
-          const SizedBox(height: 8.0),
-          Text(
-            'Dostępne od: ${DateFormat('yyyy-MM-dd').format(newProduct.dataPojawienia)}',
-            style: const TextStyle(fontSize: 16.0, color: Colors.white),
-          ),
-        ],
+    return FlippableCard(
+      front: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        clipBehavior: Clip.antiAlias,
+        color: const Color.fromARGB(240, 217, 186, 140),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.network(
+              newProduct.zdjecie,
+              fit: BoxFit.cover,
+            ),
+          ],
+        ),
+      ),
+      back: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        clipBehavior: Clip.antiAlias,
+        color: const Color.fromARGB(240, 217, 186, 140),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  newProduct.produkt,
+                  style: const TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                Text(
+                  'Dostępne od: ${DateFormat('yyyy-MM-dd').format(newProduct.dataPojawienia)}',
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
