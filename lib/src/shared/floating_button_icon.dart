@@ -20,8 +20,9 @@ class CustomFloatingActionButton extends StatelessWidget {
     return FloatingActionButton(
       heroTag: heroTag,
       onPressed: onPressed,
-      backgroundColor: const Color.fromARGB(40, 96, 85, 62),
+      backgroundColor: const Color.fromARGB(240, 217, 186, 140),
       elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       child: SvgPicture.asset(
         imagePath,
         semanticsLabel: semanticsLabel,

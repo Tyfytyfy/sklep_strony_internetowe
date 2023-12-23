@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sklep_strony_internetowe/src/models/user.dart' as custom_user;
 import 'package:sklep_strony_internetowe/src/screens/checkout.dart/cart.dart';
-import 'package:sklep_strony_internetowe/src/screens/home/new_products_slider.dart';
+
 import 'package:sklep_strony_internetowe/src/screens/home/barcode.dart';
-import 'package:sklep_strony_internetowe/src/screens/home/offer_slider.dart';
+import 'package:sklep_strony_internetowe/src/screens/home/sliders/new_products_slider.dart';
+
+import 'package:sklep_strony_internetowe/src/screens/home/sliders/offer_slider.dart';
+import 'package:sklep_strony_internetowe/src/screens/home/sliders_screens/new_products_screen.dart';
+import 'package:sklep_strony_internetowe/src/screens/home/sliders_screens/offers.dart';
 import 'package:sklep_strony_internetowe/src/screens/profile/profile.dart';
 import 'package:sklep_strony_internetowe/src/services/database.dart';
 
@@ -62,7 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
     String? email = user?.email;
     List<String>? emailParts = email?.split('@');
     String? username = emailParts?[0];
-    print(user?.email);
 
     return Scaffold(
       appBar: AppBar(
@@ -76,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              Expanded(
+              FittedBox(
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
@@ -86,9 +89,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   },
-                  icon: const Icon(Icons.account_box),
-                  label: const Text('Profil'),
+                  icon: const Icon(
+                    Icons.account_box,
+                    color: Colors.white,
+                  ),
+                  label: const Text('Profil',
+                      style: TextStyle(
+                        color: Colors.white,
+                      )),
                   style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(50, 40),
                     backgroundColor: const Color.fromARGB(255, 185, 160, 107),
                   ),
                 ),
@@ -96,14 +106,19 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 width: 10,
               ),
-              Expanded(
+              FittedBox(
                 child: ElevatedButton.icon(
                   onPressed: () {
                     PopupBarcode.showBarcodePopup(context, user?.uid);
                   },
-                  icon: const Icon(CupertinoIcons.barcode, size: 30),
-                  label: const Text("Karta klienta"),
+                  icon: const Icon(CupertinoIcons.barcode,
+                      size: 30, color: Colors.white),
+                  label: const Text("Karta klienta",
+                      style: TextStyle(
+                        color: Colors.white,
+                      )),
                   style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(50, 40),
                     backgroundColor: const Color.fromARGB(255, 185, 160, 107),
                   ),
                 ),
@@ -111,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 width: 10,
               ),
-              Expanded(
+              FittedBox(
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
@@ -121,9 +136,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   },
-                  icon: const Icon(Icons.shopping_cart_rounded),
-                  label: const Text("Koszyk"),
+                  icon: const Icon(Icons.shopping_cart_rounded,
+                      color: Colors.white),
+                  label: const Text("Koszyk",
+                      style: TextStyle(
+                        color: Colors.white,
+                      )),
                   style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(50, 40),
                     backgroundColor: const Color.fromARGB(255, 185, 160, 107),
                   ),
                 ),
@@ -138,13 +158,79 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 15,
             ),
-            SizedBox(height: 150, child: offerSlider),
+            Container(
+              decoration:
+                  const BoxDecoration(color: Color.fromARGB(255, 43, 94, 60)),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Promocje',
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white)),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const OffersScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 175, child: offerSlider),
+                ],
+              ),
+            ),
             const SizedBox(
               height: 15,
             ),
-            SizedBox(
-              height: 150,
-              child: newProductsSlider,
+            Container(
+              decoration:
+                  const BoxDecoration(color: Color.fromARGB(255, 43, 94, 60)),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Nowości',
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white)),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const NewProductsScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 150,
+                    child: newProductsSlider,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 15,

@@ -43,8 +43,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   MaterialPageRoute(builder: (context) => const LoginScreen()),
                 );
               },
-              icon: const Icon(Icons.logout),
-              label: const Text('Wyloguj'),
+              icon: const Icon(Icons.logout, color: Colors.white),
+              label:
+                  const Text('Wyloguj', style: TextStyle(color: Colors.white)),
               style: ElevatedButton.styleFrom(
                   minimumSize: const Size(200, 40),
                   backgroundColor: const Color.fromARGB(255, 185, 160, 107)),
@@ -62,7 +63,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: ElevatedButton.styleFrom(
                     minimumSize: const Size(200, 40),
                     backgroundColor: const Color.fromARGB(255, 185, 160, 107)),
-                child: const Text("Zmień hasło lub email"))
+                child: const Text("Zmień hasło lub email",
+                    style: TextStyle(color: Colors.white)))
           ],
         ),
       ),

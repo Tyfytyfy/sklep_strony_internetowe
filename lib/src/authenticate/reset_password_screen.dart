@@ -9,7 +9,7 @@ import 'package:sklep_strony_internetowe/src/shared/loading.dart';
 import '../constants/input_decoration.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({Key? key}) : super(key: key);
+  const ResetPasswordScreen({super.key});
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -118,7 +118,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                 borderRadius: BorderRadius.circular(100),
                               ),
                             ),
-                            child: const Text('Przypomnij hasło '),
+                            child: const Text('Przypomnij hasło ',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                )),
                           ),
                           const SizedBox(
                             height: 8,

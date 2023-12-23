@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sklep_strony_internetowe/src/authenticate/register_screen.dart';
 import 'package:sklep_strony_internetowe/src/models/user.dart' as custom_user;
 import 'package:sklep_strony_internetowe/src/screens/home/home.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
-  const EmailVerificationScreen({Key? key}) : super(key: key);
+  const EmailVerificationScreen({super.key});
 
   @override
   State<EmailVerificationScreen> createState() =>
@@ -141,9 +142,36 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   ),
                   child: const Text('Wyślij ponownie',
                       style: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        fontSize: 20,
-                      )),
+                          fontStyle: FontStyle.normal,
+                          fontSize: 20,
+                          color: Colors.white)),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(200, 55),
+                    backgroundColor: const Color.fromARGB(255, 185, 160, 107),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                  ),
+                  child: const Text('Wróć do ekranu rejestracji',
+                      style: TextStyle(
+                          fontStyle: FontStyle.normal,
+                          fontSize: 20,
+                          color: Colors.white)),
                 ),
               ),
             ],
