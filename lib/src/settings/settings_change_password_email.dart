@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sklep_strony_internetowe/src/constants/input_decoration.dart';
 import 'package:sklep_strony_internetowe/src/services/auth.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 
 class EmailPasswwordChange extends StatefulWidget {
-  const EmailPasswwordChange({super.key});
+  final ThemeNotifier themeNotifier;
+  const EmailPasswwordChange({super.key, required this.themeNotifier});
 
   @override
   State<EmailPasswwordChange> createState() => _EmailPasswwordChangeState();
@@ -52,7 +54,10 @@ class _EmailPasswwordChangeState extends State<EmailPasswwordChange> {
                       child: TextFormField(
                         controller: _emailController,
                         decoration:
-                            textInputDecoration.copyWith(hintText: 'Email'),
+                            buildTextInputDecoration(widget.themeNotifier)
+                                .copyWith(
+                          hintText: 'Email',
+                        ),
                         validator: (val) => val!.isEmpty ? 'Podaj email' : null,
                         onChanged: (val) {
                           setState(() => email = val);
@@ -91,8 +96,11 @@ class _EmailPasswwordChangeState extends State<EmailPasswwordChange> {
                       height: 42,
                       child: TextFormField(
                         controller: _currentPasswordController,
-                        decoration: textInputDecoration.copyWith(
-                            hintText: 'Stare hasło '),
+                        decoration:
+                            buildTextInputDecoration(widget.themeNotifier)
+                                .copyWith(
+                          hintText: 'Stare hasło',
+                        ),
                         obscureText: true,
                         validator: (val) =>
                             val!.isEmpty ? 'Podaj stare hasło' : null,
@@ -106,8 +114,11 @@ class _EmailPasswwordChangeState extends State<EmailPasswwordChange> {
                       height: 42,
                       child: TextFormField(
                         controller: _newPasswordController,
-                        decoration: textInputDecoration.copyWith(
-                            hintText: 'Nowe hasło'),
+                        decoration:
+                            buildTextInputDecoration(widget.themeNotifier)
+                                .copyWith(
+                          hintText: 'Nowe hasło',
+                        ),
                         obscureText: true,
                         validator: (val) =>
                             val!.isEmpty ? 'Podaj nowe hasło' : null,
@@ -121,8 +132,11 @@ class _EmailPasswwordChangeState extends State<EmailPasswwordChange> {
                       height: 42,
                       child: TextFormField(
                         controller: _confirmNewPasswordController,
-                        decoration: textInputDecoration.copyWith(
-                            hintText: 'Potwierdź hasło'),
+                        decoration:
+                            buildTextInputDecoration(widget.themeNotifier)
+                                .copyWith(
+                          hintText: 'Potwierdź hasło',
+                        ),
                         obscureText: true,
                         validator: (val) {
                           if (val!.isEmpty) {

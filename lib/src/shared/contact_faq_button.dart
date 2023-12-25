@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 import 'package:sklep_strony_internetowe/src/shared/floating_button_icon.dart';
 import 'package:sklep_strony_internetowe/src/shared/pop_up_window.dart';
 
 import '../constants/contact_text_decoration.dart';
 
 class ContactButtonsContainer extends StatelessWidget {
-  const ContactButtonsContainer({Key? key}) : super(key: key);
+  final ThemeNotifier themeNotifier;
+  const ContactButtonsContainer({super.key, required this.themeNotifier});
 
   @override
   Widget build(BuildContext context) {
@@ -19,24 +21,33 @@ class ContactButtonsContainer extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 29),
             child: CustomFloatingActionButton(
               onPressed: () {
-                const CustomAlertDialog(
+                CustomAlertDialog(
                   title: 'Kontakt',
                   content: Column(
                     children: [
                       // na kontakt
                       ContactInfoItem(
-                          label: 'Adres', value: 'ul. Przykładowa 123'),
+                        label: 'Adres',
+                        value: 'ul. Przykładowa 123',
+                        themeNotifier: themeNotifier,
+                      ),
                       ContactInfoItem(
-                          label: 'Email', value: 'info@example.com'),
+                          label: 'Email',
+                          value: 'info@example.com',
+                          themeNotifier: themeNotifier),
                       ContactInfoItem(
-                          label: 'Telefon', value: '+48 123 456 789'),
+                          label: 'Telefon',
+                          value: '+48 123 456 789',
+                          themeNotifier: themeNotifier),
                     ],
                   ),
+                  themeNotifier: themeNotifier,
                 ).show(context);
               },
               imagePath: 'assets/images/phone.svg',
               semanticsLabel: 'phone',
               heroTag: 'phone',
+              themeNotifier: themeNotifier,
             ),
           ),
           const SizedBox(
@@ -48,18 +59,20 @@ class ContactButtonsContainer extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 29),
             child: CustomFloatingActionButton(
               onPressed: () {
-                const CustomAlertDialog(
+                CustomAlertDialog(
                   title: 'FAQ',
-                  content: Column(
+                  content: const Column(
                     children: [
                       //na pytania
                     ],
                   ),
+                  themeNotifier: themeNotifier,
                 ).show(context);
               },
               imagePath: 'assets/images/faq.svg',
               semanticsLabel: 'faq',
               heroTag: 'faq',
+              themeNotifier: themeNotifier,
             ),
           ),
         ],

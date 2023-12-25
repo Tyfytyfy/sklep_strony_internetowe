@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sklep_strony_internetowe/src/constants/error_decoration.dart';
 import 'package:sklep_strony_internetowe/src/services/auth.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 
 import 'package:sklep_strony_internetowe/src/shared/contact_faq_button.dart';
 import 'package:sklep_strony_internetowe/src/shared/gesture_detector_text.dart';
@@ -9,7 +10,8 @@ import 'package:sklep_strony_internetowe/src/shared/loading.dart';
 import '../constants/input_decoration.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({super.key});
+  final ThemeNotifier themeNotifier;
+  const ResetPasswordScreen({super.key, required this.themeNotifier});
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -27,11 +29,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = widget.themeNotifier.currentTheme;
     return loading
-        ? const Loading()
+        ? Loading(
+            themeNotifier: widget.themeNotifier,
+          )
         : Directionality(
             textDirection: TextDirection.ltr,
             child: Scaffold(
+              backgroundColor: currentTheme.scaffoldBackgroundColor,
               body: SingleChildScrollView(
                 controller: scrollController,
                 child: Column(
@@ -40,12 +46,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       width: MediaQuery.of(context).size.width,
                       height: 214,
                       padding: const EdgeInsets.all(16.0),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(20),
                           bottomRight: Radius.circular(20),
                         ),
-                        color: Color.fromARGB(240, 217, 186, 140),
+                        color: currentTheme.appBarTheme.backgroundColor,
                       ),
                       child: Image.asset(
                         'assets/images/logo.png',
@@ -65,8 +71,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             margin: const EdgeInsets.only(left: 77, right: 78),
                             child: TextFormField(
                               controller: emailController,
-                              decoration: textInputDecoration.copyWith(
-                                  hintText: 'Email'),
+                              decoration:
+                                  buildTextInputDecoration(widget.themeNotifier)
+                                      .copyWith(
+                                hintText: 'Email',
+                              ),
                               validator: (val) =>
                                   val!.isEmpty ? 'Podaj email' : null,
                               onChanged: (val) {
@@ -112,8 +121,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             },
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size(215, 55),
-                              backgroundColor:
-                                  const Color.fromARGB(255, 185, 160, 107),
+                              backgroundColor: currentTheme
+                                  .elevatedButtonTheme.style?.backgroundColor
+                                  ?.resolve({}),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100),
                               ),
@@ -127,10 +137,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             height: 8,
                           ),
                           GestureDetectorText(
-                              text: 'Pamiętasz hasło? Zaloguj się',
-                              onTap: () {
-                                Navigator.pop(context);
-                              }),
+                            text: 'Pamiętasz hasło? Zaloguj się',
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            themeNotifier: widget.themeNotifier,
+                          ),
                           const SizedBox(height: 8),
                           Container(
                             padding: const EdgeInsets.all(5),
@@ -147,7 +159,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ],
                 ),
               ),
-              bottomNavigationBar: const ContactButtonsContainer(),
+              bottomNavigationBar: ContactButtonsContainer(
+                themeNotifier: widget.themeNotifier,
+              ),
             ),
           );
   }

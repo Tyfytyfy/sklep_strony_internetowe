@@ -5,9 +5,11 @@ import 'package:sklep_strony_internetowe/src/authenticate/authenticate.dart';
 import 'package:sklep_strony_internetowe/src/authenticate/email_verification.dart';
 import 'package:sklep_strony_internetowe/src/models/user.dart' as custom_user;
 import 'package:sklep_strony_internetowe/src/screens/home/home.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 
 class Wrapper extends StatelessWidget {
-  const Wrapper({super.key});
+  final ThemeNotifier themeNotifier;
+  const Wrapper({super.key, required this.themeNotifier});
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +18,18 @@ class Wrapper extends StatelessWidget {
     User? firebaseUser = auth.currentUser;
 
     if (user == null) {
-      return const Authenticate();
+      return Authenticate(
+        themeNotifier: themeNotifier,
+      );
     } else {
       if (firebaseUser!.emailVerified) {
-        return const HomeScreen();
+        return HomeScreen(
+          themeNotifier: themeNotifier,
+        );
       } else {
-        return const EmailVerificationScreen();
+        return EmailVerificationScreen(
+          themeNotifier: themeNotifier,
+        );
       }
     }
   }

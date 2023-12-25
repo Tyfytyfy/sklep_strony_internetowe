@@ -3,6 +3,7 @@ import 'package:sklep_strony_internetowe/src/authenticate/email_verification.dar
 import 'package:sklep_strony_internetowe/src/authenticate/login_screen.dart';
 import 'package:sklep_strony_internetowe/src/constants/error_decoration.dart';
 import 'package:sklep_strony_internetowe/src/services/auth.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 import 'package:sklep_strony_internetowe/src/shared/contact_faq_button.dart';
 import 'package:sklep_strony_internetowe/src/shared/gesture_detector_text.dart';
 import 'package:sklep_strony_internetowe/src/shared/loading.dart';
@@ -11,7 +12,9 @@ import '../constants/input_decoration.dart';
 
 class RegisterScreen extends StatefulWidget {
   final Function? toggleView;
-  const RegisterScreen({super.key, this.toggleView});
+  final ThemeNotifier themeNotifier;
+  const RegisterScreen(
+      {super.key, this.toggleView, required this.themeNotifier});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -30,11 +33,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = widget.themeNotifier.currentTheme;
     return loading
-        ? const Loading()
+        ? Loading(
+            themeNotifier: widget.themeNotifier,
+          )
         : Directionality(
             textDirection: TextDirection.ltr,
             child: Scaffold(
+              backgroundColor: currentTheme.scaffoldBackgroundColor,
               body: SingleChildScrollView(
                 controller: scrollController,
                 child: Column(
@@ -43,12 +50,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       width: MediaQuery.of(context).size.width,
                       height: 214,
                       padding: const EdgeInsets.all(16.0),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(20),
                           bottomRight: Radius.circular(20),
                         ),
-                        color: Color.fromARGB(240, 217, 186, 140),
+                        color: currentTheme.appBarTheme.backgroundColor,
                       ),
                       child: Image.asset(
                         'assets/images/logo.png',
@@ -67,8 +74,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 47,
                             margin: const EdgeInsets.only(left: 77, right: 78),
                             child: TextFormField(
-                              decoration: textInputDecoration.copyWith(
-                                  hintText: 'Email'),
+                              decoration:
+                                  buildTextInputDecoration(widget.themeNotifier)
+                                      .copyWith(
+                                hintText: 'Email',
+                              ),
                               validator: (val) =>
                                   val!.isEmpty ? 'Podaj email' : null,
                               onChanged: (val) {
@@ -84,8 +94,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 47,
                             margin: const EdgeInsets.only(left: 77, right: 78),
                             child: TextFormField(
-                              decoration: textInputDecoration.copyWith(
-                                  hintText: 'Hasło'),
+                              decoration:
+                                  buildTextInputDecoration(widget.themeNotifier)
+                                      .copyWith(
+                                hintText: 'Hasło',
+                              ),
                               obscureText: true,
                               validator: (val) =>
                                   val!.isEmpty ? 'Podaj hasło' : null,
@@ -102,8 +115,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 47,
                             margin: const EdgeInsets.only(left: 77, right: 78),
                             child: TextFormField(
-                              decoration: textInputDecoration.copyWith(
-                                  hintText: 'Potwierdź hasło'),
+                              decoration:
+                                  buildTextInputDecoration(widget.themeNotifier)
+                                      .copyWith(
+                                hintText: 'Potwierdź hasło',
+                              ),
                               obscureText: true,
                               validator: (val) =>
                                   val!.isEmpty ? 'Potwierdź hasło' : null,
@@ -134,7 +150,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          const EmailVerificationScreen(),
+                                          EmailVerificationScreen(
+                                        themeNotifier: widget.themeNotifier,
+                                      ),
                                     ),
                                   );
                                 }
@@ -148,8 +166,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size(215, 55),
-                              backgroundColor:
-                                  const Color.fromARGB(255, 185, 160, 107),
+                              backgroundColor: currentTheme
+                                  .elevatedButtonTheme.style?.backgroundColor
+                                  ?.resolve({}),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100),
                               ),
@@ -163,15 +182,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 8,
                           ),
                           GestureDetectorText(
-                              text: 'Masz już konto? Zaloguj się',
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const LoginScreen()),
-                                );
-                              }),
+                            text: 'Masz już konto? Zaloguj się',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen(
+                                          themeNotifier: widget.themeNotifier,
+                                        )),
+                              );
+                            },
+                            themeNotifier: widget.themeNotifier,
+                          ),
                           const SizedBox(height: 8),
                           Container(
                             padding: const EdgeInsets.all(5),
@@ -185,7 +207,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ],
                 ),
               ),
-              bottomNavigationBar: const ContactButtonsContainer(),
+              bottomNavigationBar: ContactButtonsContainer(
+                themeNotifier: widget.themeNotifier,
+              ),
             ),
           );
   }

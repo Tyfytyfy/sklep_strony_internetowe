@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sklep_strony_internetowe/src/screens/wrapper.dart';
 import 'package:sklep_strony_internetowe/src/services/auth.dart';
 import 'package:sklep_strony_internetowe/src/models/user.dart' as custom_user;
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 
 //import 'src/app.dart';
 import 'src/settings/settings_controller.dart';
@@ -30,22 +31,32 @@ void main() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(const MyApp());
+    runApp(ChangeNotifierProvider(
+      create: (context) => ThemeNotifier(),
+      child: MyApp(),
+    ));
   });
 
   //runApp(MyApp(settingsController: settingsController));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<custom_user.User?>.value(
-      value: AuthService().user,
-      initialData: null,
-      child: const MaterialApp(
-        home: Wrapper(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeNotifier()),
+        StreamProvider<custom_user.User?>.value(
+          value: AuthService().user,
+          initialData: null,
+        ),
+      ],
+      child: Consumer<ThemeNotifier>(
+        builder: (context, themeNotifier, child) {
+          return MaterialApp(
+            home: Wrapper(themeNotifier: themeNotifier),
+          );
+        },
       ),
     );
   }

@@ -6,9 +6,11 @@ import 'package:sklep_strony_internetowe/src/authenticate/register_screen.dart';
 import 'package:sklep_strony_internetowe/src/models/user.dart' as custom_user;
 import 'package:sklep_strony_internetowe/src/screens/home/home.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
-  const EmailVerificationScreen({super.key});
+  final ThemeNotifier themeNotifier;
+  const EmailVerificationScreen({super.key, required this.themeNotifier});
 
   @override
   State<EmailVerificationScreen> createState() =>
@@ -39,7 +41,10 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        MaterialPageRoute(
+            builder: (context) => HomeScreen(
+                  themeNotifier: widget.themeNotifier,
+                )),
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -55,21 +60,22 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<custom_user.User?>(context);
+    ThemeData currentTheme = widget.themeNotifier.currentTheme;
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(240, 217, 186, 140),
+        backgroundColor: currentTheme.scaffoldBackgroundColor,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 35),
               const SizedBox(height: 30),
-              const Center(
+              Center(
                 child: Text(
                   'Sprawdź swoją \n skrzynkę mailową',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontStyle: FontStyle.normal, fontSize: 25),
+                  style: currentTheme.textTheme.labelLarge,
                 ),
               ),
               const SizedBox(height: 8),
@@ -79,22 +85,15 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   child: RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: const TextStyle(
-                          fontStyle: FontStyle.normal,
-                          fontSize: 25,
-                          color: Colors.black),
+                      style: currentTheme.textTheme.labelLarge,
                       children: [
                         const TextSpan(
                           text: 'Wysłaliśmy do Ciebie e-mail na ',
                         ),
                         if (user?.email != null)
                           TextSpan(
-                            text: user?.email,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          )
+                              text: user?.email,
+                              style: currentTheme.textTheme.titleMedium)
                       ],
                     ),
                   ),
@@ -103,21 +102,20 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               const SizedBox(height: 16),
               Center(
                 child: SpinKitPianoWave(
-                  color: (Colors.brown[600])!,
+                  color: (currentTheme
+                      .elevatedButtonTheme.style?.backgroundColor
+                      ?.resolve({}))!,
                   size: 60.0,
                 ),
               ),
               const SizedBox(height: 8),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32.0),
                 child: Center(
                   child: Text(
                     'Weryfikacja e-maila....',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        fontSize: 25,
-                        color: Colors.black),
+                    style: currentTheme.textTheme.labelLarge,
                   ),
                 ),
               ),
@@ -135,7 +133,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(200, 55),
-                    backgroundColor: const Color.fromARGB(255, 185, 160, 107),
+                    backgroundColor: currentTheme
+                        .elevatedButtonTheme.style?.backgroundColor
+                        ?.resolve({}),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
                     ),
@@ -157,12 +157,16 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const RegisterScreen()),
+                          builder: (context) => RegisterScreen(
+                                themeNotifier: widget.themeNotifier,
+                              )),
                     );
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(200, 55),
-                    backgroundColor: const Color.fromARGB(255, 185, 160, 107),
+                    backgroundColor: currentTheme
+                        .elevatedButtonTheme.style?.backgroundColor
+                        ?.resolve({}),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
                     ),

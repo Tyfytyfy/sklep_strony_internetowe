@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sklep_strony_internetowe/src/models/offer.dart';
 import 'package:sklep_strony_internetowe/src/services/database.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 
 class OffersScreen extends StatefulWidget {
-  const OffersScreen({super.key});
+  final ThemeNotifier themeNotifier;
+  const OffersScreen({super.key, required this.themeNotifier});
 
   @override
   State<OffersScreen> createState() => _OffersScreenState();
@@ -13,17 +15,16 @@ class OffersScreen extends StatefulWidget {
 class _OffersScreenState extends State<OffersScreen> {
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = widget.themeNotifier.currentTheme;
     return Scaffold(
+      backgroundColor: currentTheme.scaffoldBackgroundColor,
       appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.black),
-          title: const Text(
+          iconTheme: currentTheme.appBarTheme.iconTheme,
+          title: Text(
             'Promocje',
-            style: TextStyle(
-                fontSize: 25.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold),
+            style: currentTheme.appBarTheme.titleTextStyle,
           ),
-          backgroundColor: const Color.fromARGB(255, 195, 172, 126)),
+          backgroundColor: currentTheme.appBarTheme.backgroundColor),
       body: StreamBuilder<Iterable<Offer>>(
         stream: DatabaseService().offers,
         builder: (context, snapshot) {
@@ -48,8 +49,9 @@ class _OffersScreenState extends State<OffersScreen> {
   }
 
   Widget _buildOfferCard(Offer offer) {
+    ThemeData currentTheme = widget.themeNotifier.currentTheme;
     return Card(
-      color: const Color.fromARGB(240, 217, 186, 140),
+      color: currentTheme.cardTheme.color,
       margin: const EdgeInsets.all(8.0),
       child: ListTile(
         leading: Image.network(
