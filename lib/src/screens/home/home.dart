@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sklep_strony_internetowe/src/models/user.dart' as custom_user;
 import 'package:sklep_strony_internetowe/src/screens/checkout.dart/cart.dart';
-
 import 'package:sklep_strony_internetowe/src/screens/home/barcode.dart';
 import 'package:sklep_strony_internetowe/src/screens/home/sliders/new_products_slider.dart';
-
 import 'package:sklep_strony_internetowe/src/screens/home/sliders/offer_slider.dart';
 import 'package:sklep_strony_internetowe/src/screens/home/sliders_screens/new_products_screen.dart';
 import 'package:sklep_strony_internetowe/src/screens/home/sliders_screens/offers.dart';
 import 'package:sklep_strony_internetowe/src/screens/profile/profile.dart';
 import 'package:sklep_strony_internetowe/src/services/database.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
+import 'package:sklep_strony_internetowe/src/shared/shared_prefences_helper.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final ThemeNotifier themeNotifier;
+
+  const HomeScreen({super.key, required this.themeNotifier});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -34,47 +36,75 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    offerSlider = const OfferSlider([]);
-    newProductsSlider = const NewProductsSlider([]);
-
+    super.initState();
+    offerSlider = OfferSlider(
+      const [],
+      themeNotifier: widget.themeNotifier,
+    );
+    newProductsSlider = NewProductsSlider(
+      const [],
+      themeNotifier: widget.themeNotifier,
+    );
     databaseService = DatabaseService();
     _updateOfferSliderData();
     _updateNewProductsSliderData();
+    _applyThemeMode();
+  }
 
-    super.initState();
+  void _applyThemeMode() async {
+    bool isDarkMode = await SharedPreferencesHelper.loadDarkMode();
+    widget.themeNotifier.setTheme(AppTheme.getThemeData(isDarkMode));
   }
 
   void _updateOfferSliderData() {
     databaseService.offers.listen((offers) {
-      setState(() {
-        offerSlider = OfferSlider(offers.toList());
-      });
+      if (mounted) {
+        setState(() {
+          offerSlider = OfferSlider(
+            offers.toList(),
+            themeNotifier: widget.themeNotifier,
+          );
+        });
+      }
     });
   }
 
   void _updateNewProductsSliderData() {
     databaseService.newProducts.listen((newProducts) {
-      setState(() {
-        newProductsSlider = NewProductsSlider(newProducts.toList());
-      });
+      if (mounted) {
+        setState(() {
+          newProductsSlider = NewProductsSlider(
+            newProducts.toList(),
+            themeNotifier: widget.themeNotifier,
+          );
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = widget.themeNotifier.currentTheme;
     final user = Provider.of<custom_user.User?>(context);
     String? email = user?.email;
     List<String>? emailParts = email?.split('@');
     String? username = emailParts?[0];
 
     return Scaffold(
+      backgroundColor: currentTheme.scaffoldBackgroundColor,
       appBar: AppBar(
+        elevation: currentTheme.appBarTheme.elevation,
+        scrolledUnderElevation: currentTheme.appBarTheme.scrolledUnderElevation,
+        backgroundColor: currentTheme.appBarTheme.backgroundColor,
         automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromARGB(255, 195, 172, 126),
-        title: Center(child: Text("Cześć, ${username ?? ''}")),
+        title: Center(
+            child: Text(
+          "Cześć, ${username ?? ''}",
+          style: TextStyle(color: currentTheme.textTheme.titleLarge?.color),
+        )),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: const Color.fromARGB(255, 195, 172, 126),
+        color: currentTheme.bottomAppBarTheme.color,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -85,7 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ProfileScreen(),
+                        builder: (context) =>
+                            ProfileScreen(themeNotifier: widget.themeNotifier),
                       ),
                     );
                   },
@@ -94,12 +125,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.white,
                   ),
                   label: const Text('Profil',
-                      style: TextStyle(
-                        color: Colors.white,
-                      )),
+                      style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(50, 40),
-                    backgroundColor: const Color.fromARGB(255, 185, 160, 107),
+                    backgroundColor: currentTheme
+                        .elevatedButtonTheme.style?.backgroundColor
+                        ?.resolve({}),
                   ),
                 ),
               ),
@@ -114,12 +145,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: const Icon(CupertinoIcons.barcode,
                       size: 30, color: Colors.white),
                   label: const Text("Karta klienta",
-                      style: TextStyle(
-                        color: Colors.white,
-                      )),
+                      style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(50, 40),
-                    backgroundColor: const Color.fromARGB(255, 185, 160, 107),
+                    backgroundColor: currentTheme
+                        .elevatedButtonTheme.style?.backgroundColor
+                        ?.resolve({}),
                   ),
                 ),
               ),
@@ -132,19 +163,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CartScreen(),
+                        builder: (context) =>
+                            CartScreen(themeNotifier: widget.themeNotifier),
                       ),
                     );
                   },
                   icon: const Icon(Icons.shopping_cart_rounded,
                       color: Colors.white),
                   label: const Text("Koszyk",
-                      style: TextStyle(
-                        color: Colors.white,
-                      )),
+                      style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(50, 40),
-                    backgroundColor: const Color.fromARGB(255, 185, 160, 107),
+                    backgroundColor: currentTheme
+                        .elevatedButtonTheme.style?.backgroundColor
+                        ?.resolve({}),
                   ),
                 ),
               ),
@@ -160,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               decoration:
-                  const BoxDecoration(color: Color.fromARGB(255, 43, 94, 60)),
+                  BoxDecoration(color: currentTheme.colorScheme.background),
               child: Column(
                 children: [
                   Row(
@@ -181,7 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const OffersScreen(),
+                              builder: (context) => OffersScreen(
+                                  themeNotifier: widget.themeNotifier),
                             ),
                           );
                         },
@@ -197,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               decoration:
-                  const BoxDecoration(color: Color.fromARGB(255, 43, 94, 60)),
+                  BoxDecoration(color: currentTheme.colorScheme.background),
               child: Column(
                 children: [
                   Row(
@@ -218,7 +251,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const NewProductsScreen(),
+                              builder: (context) => NewProductsScreen(
+                                  themeNotifier: widget.themeNotifier),
                             ),
                           );
                         },
@@ -236,8 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 15,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height -
-                  360, // Dostosuj wysokość do potrzeb
+              height: MediaQuery.of(context).size.height - 360,
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -254,8 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: Card(
                       margin: const EdgeInsets.all(8.0),
-                      color: const Color.fromARGB(240, 217, 186,
-                          140), // Tutaj można dostosować kolor kafelka
+                      color: currentTheme.cardTheme.color,
                       child: Center(
                         child: Text(
                           departments[index],

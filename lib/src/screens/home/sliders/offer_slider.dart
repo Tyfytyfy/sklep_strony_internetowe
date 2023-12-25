@@ -4,11 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:sklep_strony_internetowe/src/models/offer.dart';
 import 'package:page_view_indicators/page_view_indicators.dart';
 import 'package:sklep_strony_internetowe/src/screens/home/sliders/flippable_card.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 
 class OfferSlider extends StatefulWidget {
   final List<Offer> offers;
+  final ThemeNotifier themeNotifier;
 
-  const OfferSlider(this.offers, {super.key});
+  const OfferSlider(this.offers, {super.key, required this.themeNotifier});
 
   @override
   _OfferSliderState createState() => _OfferSliderState();
@@ -73,15 +75,15 @@ class _OfferSliderState extends State<OfferSlider> {
   }
 
   Widget buildItem(Offer offer) {
+    ThemeData currentTheme = widget.themeNotifier.currentTheme;
     return FlippableCard(
       front: Card(
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
         clipBehavior: Clip.antiAlias,
-        color: const Color.fromARGB(240, 217, 186, 140),
+        color: currentTheme.cardTheme.color,
         child: Stack(
           fit: StackFit.expand,
           children: [
-            // Zdjęcie w tle
             Image.network(
               offer.zdjecie,
               fit: BoxFit.cover,
@@ -92,11 +94,10 @@ class _OfferSliderState extends State<OfferSlider> {
       back: Card(
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
         clipBehavior: Clip.antiAlias,
-        color: const Color.fromARGB(240, 217, 186, 140),
+        color: currentTheme.cardTheme.color,
         child: Stack(
           fit: StackFit.expand,
           children: [
-            // Zawartość karty
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

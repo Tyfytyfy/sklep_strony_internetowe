@@ -5,11 +5,14 @@ import 'package:page_view_indicators/page_view_indicators.dart';
 import 'package:sklep_strony_internetowe/src/models/new_products.dart';
 
 import 'package:sklep_strony_internetowe/src/screens/home/sliders/flippable_card.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 
 class NewProductsSlider extends StatefulWidget {
   final List<NewProducts> newProducts;
+  final ThemeNotifier themeNotifier;
 
-  const NewProductsSlider(this.newProducts, {super.key});
+  const NewProductsSlider(this.newProducts,
+      {super.key, required this.themeNotifier});
 
   @override
   _NewProductsSliderState createState() => _NewProductsSliderState();
@@ -28,7 +31,7 @@ class _NewProductsSliderState extends State<NewProductsSlider> {
   }
 
   void startAutoPlay() {
-    Timer.periodic(const Duration(seconds: 3), (timer) {
+    Timer.periodic(const Duration(seconds: 8), (timer) {
       if (currentPage < widget.newProducts.length - 1) {
         currentPage++;
       } else {
@@ -37,7 +40,7 @@ class _NewProductsSliderState extends State<NewProductsSlider> {
       if (_pageController.hasClients) {
         _pageController.animateToPage(
           currentPage,
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 1000),
           curve: Curves.easeInOut,
         );
       }
@@ -73,11 +76,12 @@ class _NewProductsSliderState extends State<NewProductsSlider> {
   }
 
   Widget buildItem(NewProducts newProduct) {
+    ThemeData currentTheme = widget.themeNotifier.currentTheme;
     return FlippableCard(
       front: Card(
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
         clipBehavior: Clip.antiAlias,
-        color: const Color.fromARGB(240, 217, 186, 140),
+        color: currentTheme.cardTheme.color,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -91,7 +95,7 @@ class _NewProductsSliderState extends State<NewProductsSlider> {
       back: Card(
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
         clipBehavior: Clip.antiAlias,
-        color: const Color.fromARGB(240, 217, 186, 140),
+        color: currentTheme.cardTheme.color,
         child: Stack(
           fit: StackFit.expand,
           children: [

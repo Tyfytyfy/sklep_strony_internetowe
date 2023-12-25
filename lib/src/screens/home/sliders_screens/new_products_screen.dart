@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Importuj pakiet do obsługi daty
 import 'package:sklep_strony_internetowe/src/models/new_products.dart'; // Importuj model nowych produktów
-import 'package:sklep_strony_internetowe/src/services/database.dart'; // Importuj klasę obsługującą bazę danych
+import 'package:sklep_strony_internetowe/src/services/database.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart'; // Importuj klasę obsługującą bazę danych
 
 class NewProductsScreen extends StatefulWidget {
-  const NewProductsScreen({super.key});
+  final ThemeNotifier themeNotifier;
+  const NewProductsScreen({super.key, required this.themeNotifier});
 
   @override
   State<NewProductsScreen> createState() => _NewProductsScreenState();
@@ -13,18 +15,14 @@ class NewProductsScreen extends StatefulWidget {
 class _NewProductsScreenState extends State<NewProductsScreen> {
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = widget.themeNotifier.currentTheme;
     return Scaffold(
+      backgroundColor: currentTheme.scaffoldBackgroundColor,
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
-        title: const Text(
-          'Nowe Produkty',
-          style: TextStyle(
-            fontSize: 25.0,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: const Color.fromARGB(255, 195, 172, 126),
+        iconTheme: currentTheme.appBarTheme.iconTheme,
+        title: Text('Nowe Produkty',
+            style: currentTheme.appBarTheme.titleTextStyle),
+        backgroundColor: currentTheme.appBarTheme.backgroundColor,
       ),
       body: StreamBuilder<Iterable<NewProducts>>(
         stream: DatabaseService().newProducts,
@@ -51,8 +49,9 @@ class _NewProductsScreenState extends State<NewProductsScreen> {
   }
 
   Widget _buildNewProductCard(NewProducts newProduct) {
+    ThemeData currentTheme = widget.themeNotifier.currentTheme;
     return Card(
-      color: const Color.fromARGB(240, 217, 186, 140),
+      color: currentTheme.cardTheme.color,
       margin: const EdgeInsets.all(8.0),
       child: ListTile(
         leading: Image.network(

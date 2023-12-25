@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 
 class CustomAlertDialog extends StatelessWidget {
+  final ThemeNotifier themeNotifier;
   final String title;
   final Widget content;
 
   const CustomAlertDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.content,
-  }) : super(key: key);
+    required this.themeNotifier,
+  });
 
   void show(BuildContext context) {
+    ThemeData currentTheme = themeNotifier.currentTheme;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -18,7 +22,7 @@ class CustomAlertDialog extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50.0),
           ),
-          backgroundColor: const Color.fromRGBO(225, 217, 202, 1),
+          backgroundColor: currentTheme.scaffoldBackgroundColor,
           child: SizedBox(
             width: 296,
             height: 637,
@@ -27,10 +31,7 @@ class CustomAlertDialog extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+                  child: Text(title, style: currentTheme.textTheme.titleMedium),
                 ),
                 Expanded(
                   child: SingleChildScrollView(

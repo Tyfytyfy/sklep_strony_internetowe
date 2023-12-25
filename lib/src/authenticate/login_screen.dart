@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sklep_strony_internetowe/src/authenticate/register_screen.dart';
 import 'package:sklep_strony_internetowe/src/authenticate/reset_password_screen.dart';
 import 'package:sklep_strony_internetowe/src/constants/error_decoration.dart';
 import 'package:sklep_strony_internetowe/src/screens/home/home.dart';
 import 'package:sklep_strony_internetowe/src/services/auth.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 
 import 'package:sklep_strony_internetowe/src/shared/contact_faq_button.dart';
 import 'package:sklep_strony_internetowe/src/shared/gesture_detector_text.dart';
 import 'package:sklep_strony_internetowe/src/shared/loading.dart';
+import 'package:sklep_strony_internetowe/src/shared/shared_prefences_helper.dart';
 
 import '../constants/input_decoration.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function? toggleView;
-  const LoginScreen({super.key, this.toggleView});
+  final ThemeNotifier themeNotifier;
+  const LoginScreen({super.key, this.toggleView, required this.themeNotifier});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -33,40 +35,57 @@ class _LoginScreenState extends State<LoginScreen> {
   bool? isChecked = false;
   bool loading = false;
   String error = '';
+  bool? isSwitched = false;
+  bool isDarkMode = false;
 
   @override
   void initState() {
     super.initState();
     loadSavedCredentials();
+    _applyThemeMode();
   }
 
   void loadSavedCredentials() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final credentials = await SharedPreferencesHelper.loadCredentials();
     if (mounted) {
       setState(() {
-        _emailController.text = prefs.getString('email') ?? '';
-        _passwordController.text = prefs.getString('password') ?? '';
-        email = prefs.getString('email') ?? '';
-        password = prefs.getString('password') ?? '';
-        isChecked = prefs.getBool('isChecked') ?? false;
+        _emailController.text = credentials['email'];
+        _passwordController.text = credentials['password'];
+        email = credentials['email'];
+        password = credentials['password'];
+        isChecked = credentials['isChecked'];
+        isSwitched = credentials['isSwitched'];
+        isDarkMode = credentials['isDarkMode'];
       });
+      print(isDarkMode);
     }
   }
 
+  void _applyThemeMode() async {
+    bool isDarkMode = await SharedPreferencesHelper.loadDarkMode();
+    widget.themeNotifier.setTheme(AppTheme.getThemeData(isDarkMode));
+  }
+
   void saveCredentials() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('email', _emailController.text);
-    prefs.setString('password', _passwordController.text);
-    prefs.setBool('isChecked', isChecked!);
+    await SharedPreferencesHelper.saveCredentials(
+        email: _emailController.text,
+        password: _passwordController.text,
+        isChecked: isChecked!,
+        isSwitched: isSwitched!,
+        isDarkMode: isDarkMode);
   }
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = widget.themeNotifier.currentTheme;
     return loading
-        ? const Loading()
+        ? Loading(
+            themeNotifier: widget.themeNotifier,
+          )
         : Directionality(
             textDirection: TextDirection.ltr,
             child: Scaffold(
+              backgroundColor: currentTheme.scaffoldBackgroundColor,
               body: SingleChildScrollView(
                 controller: scrollController,
                 child: Column(
@@ -75,12 +94,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: MediaQuery.of(context).size.width,
                       height: 214,
                       padding: const EdgeInsets.all(16.0),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(20),
                           bottomRight: Radius.circular(20),
                         ),
-                        color: Color.fromARGB(240, 217, 186, 140),
+                        color: currentTheme.appBarTheme.backgroundColor,
                       ),
                       child: Image.asset(
                         'assets/images/logo.png',
@@ -99,9 +118,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 47,
                             margin: const EdgeInsets.only(left: 77, right: 78),
                             child: TextFormField(
+                              style: currentTheme.textTheme.labelMedium,
                               controller: _emailController,
-                              decoration: textInputDecoration.copyWith(
-                                  hintText: 'Email'),
+                              decoration:
+                                  buildTextInputDecoration(widget.themeNotifier)
+                                      .copyWith(
+                                hintText: 'Email',
+                              ),
                               validator: (val) =>
                                   val!.isEmpty ? 'Podaj email' : null,
                               onChanged: (val) {
@@ -117,9 +140,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 47,
                             margin: const EdgeInsets.only(left: 77, right: 78),
                             child: TextFormField(
+                              style: currentTheme.textTheme.labelMedium,
                               controller: _passwordController,
-                              decoration: textInputDecoration.copyWith(
-                                  hintText: 'Hasło'),
+                              decoration:
+                                  buildTextInputDecoration(widget.themeNotifier)
+                                      .copyWith(
+                                hintText: 'Hasło',
+                              ),
                               obscureText: true,
                               validator: (val) =>
                                   val!.isEmpty ? 'Podaj hasło' : null,
@@ -136,8 +163,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 Checkbox(
                                   checkColor: Colors.white,
-                                  activeColor:
-                                      const Color.fromARGB(255, 185, 160, 107),
+                                  activeColor: currentTheme.elevatedButtonTheme
+                                      .style!.backgroundColor
+                                      ?.resolve({}),
                                   value: isChecked,
                                   onChanged: (bool? value) {
                                     setState(() {
@@ -148,7 +176,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                 ),
-                                const Text('Zapamiętaj mnie'),
+                                Text(
+                                  'Zapamiętaj mnie',
+                                  style: currentTheme.textTheme.labelMedium,
+                                ),
                               ],
                             ),
                           ),
@@ -185,16 +216,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            const HomeScreen()),
+                                        builder: (context) => HomeScreen(
+                                              themeNotifier:
+                                                  widget.themeNotifier,
+                                            )),
                                   );
                                 }
                               }
                             },
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size(215, 55),
-                              backgroundColor:
-                                  const Color.fromARGB(255, 185, 160, 107),
+                              backgroundColor: currentTheme
+                                  .elevatedButtonTheme.style?.backgroundColor
+                                  ?.resolve({}),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100),
                               ),
@@ -208,28 +242,34 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 8,
                           ),
                           GestureDetectorText(
-                              text: 'Nie posiadasz konta? Zarejestruj się',
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RegisterScreen()),
-                                );
-                              }),
+                            text: 'Nie posiadasz konta? Zarejestruj się',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RegisterScreen(
+                                          themeNotifier: widget.themeNotifier,
+                                        )),
+                              );
+                            },
+                            themeNotifier: widget.themeNotifier,
+                          ),
                           const SizedBox(
                             height: 8,
                           ),
                           GestureDetectorText(
-                              text: 'Zapomniałeś hasła?',
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ResetPasswordScreen()),
-                                );
-                              }),
+                            text: 'Zapomniałeś hasła?',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ResetPasswordScreen(
+                                          themeNotifier: widget.themeNotifier,
+                                        )),
+                              );
+                            },
+                            themeNotifier: widget.themeNotifier,
+                          ),
                           const SizedBox(height: 8),
                           Container(
                             padding: const EdgeInsets.all(5),
@@ -243,7 +283,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              bottomNavigationBar: const ContactButtonsContainer(),
+              bottomNavigationBar: ContactButtonsContainer(
+                themeNotifier: widget.themeNotifier,
+              ),
             ),
           );
   }

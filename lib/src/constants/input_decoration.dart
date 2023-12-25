@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 
-final textInputDecoration = InputDecoration(
-  fillColor: Colors.white,
-  filled: true,
-  contentPadding:
-      const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 10),
-  enabledBorder: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(100),
-    borderSide: const BorderSide(color: Colors.white, width: 2),
-  ),
-  focusedBorder: OutlineInputBorder(
-    borderSide: const BorderSide(color: Colors.blue, width: 2),
-    borderRadius: BorderRadius.circular(100),
-  ),
-);
+InputDecoration buildTextInputDecoration(ThemeNotifier themeNotifier) {
+  return InputDecoration(
+      fillColor: themeNotifier.currentTheme.scaffoldBackgroundColor,
+      filled: true,
+      contentPadding:
+          const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 10),
+      enabledBorder:
+          themeNotifier.currentTheme.inputDecorationTheme.enabledBorder,
+      focusedBorder:
+          themeNotifier.currentTheme.inputDecorationTheme.focusedBorder,
+      hintStyle: themeNotifier.currentTheme.inputDecorationTheme.hintStyle);
+}

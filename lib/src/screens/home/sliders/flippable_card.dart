@@ -33,22 +33,25 @@ class _FlippableCardState extends State<FlippableCard>
   void startAutoFlip() {
     Timer(const Duration(seconds: 2), () {
       if (!_isFlipped) {
-        _controller.forward();
+        if (mounted) {
+          _controller.forward();
+        }
+
         _isFlipped = true;
       }
     });
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (_controller.isCompleted || _controller.isDismissed) {
-          _controller.forward(from: 0.0);
-        } else {
-          _controller.reverse();
-        }
-      },
+      onTap: () {},
       child: AnimatedBuilder(
         animation: _animation,
         builder: (context, child) {
