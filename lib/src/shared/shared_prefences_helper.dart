@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sklep_strony_internetowe/src/screens/checkout.dart/cart_items.dart';
 
 class SharedPreferencesHelper {
   static Future<void> saveCredentials({
@@ -40,6 +43,29 @@ class SharedPreferencesHelper {
   static Future<bool> loadDarkMode() async {
     final prefs = await SharedPreferencesHelper.prefs;
     return prefs.getBool('isDarkMode') ?? false;
+  }
+
+  static const String _keyCart = 'cart';
+
+  static Future<void> saveCart(List<CartItem> cartItems) async {
+    final prefs = await SharedPreferences.getInstance();
+    final encodedItems = cartItems.map((item) => item.toJson()).toList();
+    prefs.setString(_keyCart, jsonEncode(encodedItems));
+  }
+
+  static Future<List<CartItem>> loadCart() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? cartJson = prefs.getString(_keyCart);
+
+    if (cartJson != null) {
+      final List<dynamic> decodedItems = jsonDecode(cartJson);
+      final cartItems =
+          decodedItems.map((item) => CartItem.fromJson(item)).toList();
+      return cartItems;
+    } else {
+      print("No cart data found.");
+      return [];
+    }
   }
 
   static Future<SharedPreferences> get prefs => SharedPreferences.getInstance();
