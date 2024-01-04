@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:sklep_strony_internetowe/src/models/customer.dart';
+import 'package:sklep_strony_internetowe/src/models/departments_products.dart';
 import 'package:sklep_strony_internetowe/src/models/new_products.dart';
 import 'package:sklep_strony_internetowe/src/models/offer.dart';
 
@@ -109,5 +110,18 @@ class DatabaseService {
     return newProductsCollection
         .snapshots()
         .asyncMap(_newProductsListFromSnapshot);
+  }
+
+  Future<List<DepartmentProduct>> fetchDepartmentProducts(
+      String department) async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection(department).get();
+
+    return querySnapshot.docs.map((doc) {
+      return DepartmentProduct(
+        nazwa: doc['nazwa'] ?? '',
+        cena: doc['cena'] ?? '',
+      );
+    }).toList();
   }
 }

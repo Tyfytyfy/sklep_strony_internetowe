@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sklep_strony_internetowe/src/models/user.dart' as custom_user;
 import 'package:sklep_strony_internetowe/src/screens/checkout.dart/cart.dart';
+import 'package:sklep_strony_internetowe/src/screens/checkout.dart/shopping_cart.dart';
 import 'package:sklep_strony_internetowe/src/screens/home/barcode.dart';
+import 'package:sklep_strony_internetowe/src/screens/home/departments/departments_screen.dart';
 import 'package:sklep_strony_internetowe/src/screens/home/sliders/new_products_slider.dart';
 import 'package:sklep_strony_internetowe/src/screens/home/sliders/offer_slider.dart';
 import 'package:sklep_strony_internetowe/src/screens/home/sliders_screens/new_products_screen.dart';
@@ -28,10 +30,17 @@ class _HomeScreenState extends State<HomeScreen> {
   late DatabaseService databaseService;
   final List<String> departments = [
     'Elektronika',
+    'Żywność',
     'Moda',
     'Książki',
     'Sport',
-    // Dodaj dowolne inne działy, które chcesz wyświetlić
+  ];
+  final List<String> departmentsArg = [
+    'elektronika',
+    'żywność',
+    'moda',
+    'książki',
+    'sport',
   ];
 
   @override
@@ -89,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
     String? email = user?.email;
     List<String>? emailParts = email?.split('@');
     String? username = emailParts?[0];
-
+    ShoppingCart shoppingCart = ShoppingCart();
     return Scaffold(
       backgroundColor: currentTheme.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -163,8 +172,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            CartScreen(themeNotifier: widget.themeNotifier),
+                        builder: (context) => CartScreen(
+                          themeNotifier: widget.themeNotifier,
+                          shoppingCart: shoppingCart,
+                        ),
                       ),
                     );
                   },
@@ -281,9 +292,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      // Tutaj dodaj akcję, która ma być wykonana po kliknięciu na kafelek
-                      // Możesz użyć Navigator do przeniesienia użytkownika na nową stronę
-                      // np. Navigator.push(context, MaterialPageRoute(builder: (context) => NowaStrona()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DepartmentProductsScreen(
+                            themeNotifier: widget.themeNotifier,
+                            department: departments[index],
+                            departmentArg: departmentsArg[index],
+                            shoppingCart: shoppingCart,
+                          ),
+                        ),
+                      );
                     },
                     child: Card(
                       margin: const EdgeInsets.all(8.0),
