@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              FittedBox(
+              Expanded(
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 width: 10,
               ),
-              FittedBox(
+              Expanded(
                 child: ElevatedButton.icon(
                   onPressed: () {
                     PopupBarcode.showBarcodePopup(context, user?.uid);
@@ -166,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 width: 10,
               ),
-              FittedBox(
+              Expanded(
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(

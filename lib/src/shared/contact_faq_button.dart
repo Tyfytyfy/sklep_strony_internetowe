@@ -12,8 +12,9 @@ class ContactButtonsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 48),
+      margin: const EdgeInsets.only(left: 24, right: 24),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
             width: 63,
@@ -49,9 +50,6 @@ class ContactButtonsContainer extends StatelessWidget {
               heroTag: 'phone',
               themeNotifier: themeNotifier,
             ),
-          ),
-          const SizedBox(
-            width: 170,
           ),
           Container(
             width: 63,

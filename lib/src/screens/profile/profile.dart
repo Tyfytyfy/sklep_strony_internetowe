@@ -10,8 +10,7 @@ import 'package:sklep_strony_internetowe/src/shared/color_themes.dart';
 class ProfileScreen extends StatefulWidget {
   final ThemeNotifier themeNotifier;
 
-  const ProfileScreen({Key? key, required this.themeNotifier})
-      : super(key: key);
+  const ProfileScreen({super.key, required this.themeNotifier});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();

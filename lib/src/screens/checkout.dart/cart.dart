@@ -9,7 +9,7 @@ class CartScreen extends StatefulWidget {
   final ShoppingCart shoppingCart;
 
   const CartScreen({
-    Key? key,
+    super.key,
     required this.themeNotifier,
     required this.shoppingCart,
   });
@@ -78,7 +78,7 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                     onPressed: () {
                       setState(() {
-                        widget.shoppingCart.items.removeAt(index);
+                        shoppingCart.items.removeAt(index);
                         SharedPreferencesHelper.saveCart(
                             widget.shoppingCart.items);
                       });

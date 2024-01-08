@@ -7,11 +7,11 @@ class GestureDetectorText extends StatelessWidget {
   final ThemeNotifier themeNotifier;
 
   const GestureDetectorText({
-    Key? key,
+    super.key,
     required this.text,
     required this.onTap,
     required this.themeNotifier,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

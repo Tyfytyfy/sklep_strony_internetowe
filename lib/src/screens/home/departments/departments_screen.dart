@@ -14,12 +14,12 @@ class DepartmentProductsScreen extends StatelessWidget {
   final ShoppingCart shoppingCart; // Dodajemy pole ShoppingCart
 
   const DepartmentProductsScreen({
-    Key? key,
+    super.key,
     required this.themeNotifier,
     required this.department,
     required this.departmentArg,
     required this.shoppingCart,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

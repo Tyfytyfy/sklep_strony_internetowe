@@ -38,16 +38,19 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
-      print(user);
-      if (user?.emailVerified ?? false) {
+
+      if (user != null && user.emailVerified) {
+        // Pomyślnie uwierzytelniono użytkownika
         return _userFromFirebaseUser(user);
       } else {
+        // Błędne dane uwierzytelniające lub użytkownik niezweryfikowany
         await _auth.signOut();
-        return 'notVerified'; // Zwracaj string 'notVerified', aby oznaczyć niezweryfikowanego użytkownika
+        return 'notVerified';
       }
     } catch (e) {
+      // Błąd podczas uwierzytelniania
       print(e.toString());
-      return 'error'; // Zwracaj string 'error' w przypadku błędu logowania
+      return null;
     }
   }
 

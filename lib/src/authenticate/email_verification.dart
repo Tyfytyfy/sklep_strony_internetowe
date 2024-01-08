@@ -29,27 +29,35 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
         Timer.periodic(const Duration(seconds: 3), (_) => checkEmailVerified());
   }
 
-  checkEmailVerified() async {
+  Future<void> checkEmailVerified() async {
     await FirebaseAuth.instance.currentUser?.reload();
+
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      if (mounted) {
+        // Tutaj możesz obsłużyć sytuację, gdy nie ma zalogowanego użytkownika
+        // Tu możesz pokazać Snackbar lub inny komunikat użytkownikowi
+      }
+      return;
+    }
+
+    await currentUser.reload();
+
+    bool isEmailVerified = currentUser.emailVerified;
+
     if (mounted) {
       setState(() {
-        isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+        isEmailVerified = isEmailVerified;
       });
     }
 
-    if (isEmailVerified) {
-      if (!mounted) return;
+    if (isEmailVerified && mounted) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => HomeScreen(
-                  themeNotifier: widget.themeNotifier,
-                )),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Adres e-mail został pomyślnie zweryfikowany"),
+          builder: (context) => HomeScreen(
+            themeNotifier: widget.themeNotifier,
+          ),
         ),
       );
 
@@ -110,7 +118,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               ),
               const SizedBox(height: 8),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32.0),
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: Center(
                   child: Text(
                     'Weryfikacja e-maila....',

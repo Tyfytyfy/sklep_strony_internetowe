@@ -13,11 +13,11 @@ class ProductTile extends StatefulWidget {
   final ShoppingCart shoppingCart;
 
   const ProductTile({
-    Key? key,
+    super.key,
     required this.product,
     required this.themeNotifier,
     required this.shoppingCart,
-  }) : super(key: key);
+  });
 
   @override
   State<ProductTile> createState() => _ProductTileState();
@@ -67,20 +67,23 @@ class _ProductTileState extends State<ProductTile> {
       });
 
       SharedPreferencesHelper.saveCart(loadedItems);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${widget.product.nazwa} został dodany do koszyka'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${widget.product.nazwa} został dodany do koszyka'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Produkt już znajduje się w koszyku'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Produkt już znajduje się w koszyku'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     }
   }
 
